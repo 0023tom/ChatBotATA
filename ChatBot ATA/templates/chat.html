@@ -25,8 +25,8 @@
 									<span class="online_icon"></span>
 								</div>
 								<div class="user_info">
-									<span>ChatBot</span>
-									<p>Ask me anything!</p>
+									<span>Ask Adam</span>
+									<p>Welcome to our chat! How can I assist you today?</p>
 								</div>
 							</div>
 						</div>
@@ -54,7 +54,7 @@
 					const hour = date.getHours();
 					const minute = date.getMinutes();
 					const str_minute = minute < 10 ? "0" + minute : minute; // Add leading zero if minute is less than 10
-            		const str_time = hour + ":" + str_minute; // Use the formatted minute string
+					const str_time = hour + ":" + str_minute; // Use the formatted minute string
 
 					var rawText = $("#text").val();
 
@@ -70,7 +70,9 @@
 						type: "POST",
 						url: "/get",
 					}).done(function(data) {
-						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="/static/Adam.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
+						// Extract the message from the JSON response object
+						var message = data.message;
+						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="/static/Adam.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + message + '<span class="msg_time">' + str_time + '</span></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
 					});
 					event.preventDefault();
