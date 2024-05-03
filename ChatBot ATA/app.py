@@ -1,11 +1,19 @@
+import pathlib
+import textwrap
 from flask import Flask, render_template, request, jsonify
+import markdown
+
 import google.generativeai as genai
 
 app = Flask(__name__)
 
+def to_markdown(text):
+    text = text.replace('•', '  *')
+    return textwrap.indent(text, '> ', predicate=lambda _: True)
+
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('chat.html')
 
 @app.route("/get", methods = ["GET", "POST"])
 def chat():
@@ -51,6 +59,11 @@ def chat():
             response = model.generate_content(input_text)
 
             bot_response = response.text if hasattr(response, 'text') else str(response)
+
+            bot_response_markdown = to_markdown(bot_response)  # Convert to Markdown
+
+            # Convert Markdown to HTML
+            botHtml = markdown.markdown(bot_response_markdown, extensions=['fenced_code'])
 
             return jsonify({"sender": "Bot", "message": bot_response})
         except Exception as e:
